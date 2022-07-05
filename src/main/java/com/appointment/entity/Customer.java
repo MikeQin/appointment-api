@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "CUSTOMER")
 public class Customer {
@@ -24,7 +26,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotBlank
-    private String fristName;
+    private String firstName;
     @NotBlank
     private String lastName;
     @NotBlank
@@ -43,7 +45,7 @@ public class Customer {
     private Date dateOfBirth;
     
     public String getName() {
-    	return this.fristName + " " + this.lastName;
+    	return this.firstName + " " + this.lastName;
     }
 
 }
