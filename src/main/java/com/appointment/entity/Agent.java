@@ -47,7 +47,7 @@ public class Agent {
 	@Lob
 	private byte[] profilePhoto;
 	
-	// relationshop mapping
+	// relationship mapping
 	@OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Appointment> appointments;
 	
