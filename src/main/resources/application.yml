@@ -17,4 +17,4 @@ spring:
     show-sql: true
 #  data:
 #    rest:
-#      base-path: /api
+#      base-path: /rest

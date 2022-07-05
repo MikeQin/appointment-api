@@ -54,4 +54,16 @@ public class Agent {
 	public String getName() {
 		return this.firstName + " " + this.lastName;
 	}
+	
+	public static void copy(Agent source, Agent target) {
+		if (source == null || target == null) return;
+		
+		if (source.getId() > 0) target.setId(source.getId());
+		if (!source.getFirstName().isBlank()) target.setFirstName(source.getFirstName());
+		if (!source.getLastName().isBlank()) target.setLastName(source.getLastName());
+		if (!source.getEmail().isBlank()) target.setEmail(source.getEmail());
+		if (source.getProfilePhoto().length > 0) target.setProfilePhoto(source.getProfilePhoto());
+		if (source.getAppointments() != null && !source.getAppointments().isEmpty()) target.setAppointments(source.getAppointments());
+		
+	}
 }
