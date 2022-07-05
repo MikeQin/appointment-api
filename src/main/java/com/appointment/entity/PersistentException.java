@@ -1,6 +1,5 @@
 package com.appointment.entity;
 
-@SuppressWarnings("ALL")
 public class PersistentException extends RuntimeException {
 
 	private static final long serialVersionUID = -5606094713330396599L;
