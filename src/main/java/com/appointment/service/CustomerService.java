@@ -18,18 +18,6 @@ public class CustomerService {
 		this.repo = repo;
 	}
 	
-	public Customer create(Customer customer, boolean flush) {
-		
-		Customer customerEntity = repo.save(customer);
-		
-		if (flush) {
-			customerEntity = repo.saveAndFlush(customer);
-		} else {
-			customerEntity = repo.save(customer);
-		}
-		return customerEntity;
-	}
-	
 	public List<Customer> getAll() {
 		List<Customer> customers = repo.findAll();
 		
@@ -48,6 +36,39 @@ public class CustomerService {
 		return customerEntity;
 	}
 	
+	public Customer getByEmail(String email) {		
+		return repo.findByEmail(email);
+	}
+	
+	public List<Customer> getByFirstName(String firstName) {
+		return repo.findByFirstName(firstName);
+	}
+	
+	public List<Customer> getByLastName(String lastName) {
+		return repo.findByFirstName(lastName);
+	}
+	
+	public Customer create(Customer customer) {
+		return create(customer, false);
+	}
+	
+	public Customer create(Customer customer, boolean flush) {
+		
+		Customer customerEntity = null;		
+		if (flush) {
+			customerEntity = repo.saveAndFlush(customer);
+		} else {
+			customerEntity = repo.save(customer);
+		}
+		return customerEntity;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param customer, the full copy of the original entity
+	 * @return
+	 */
 	public Customer update(Long id, Customer customer) {
 		
 		Customer customerEntity = null;
@@ -61,6 +82,15 @@ public class CustomerService {
 		customerEntity = repo.save(customerEntity);
 		
 		return customerEntity;
+	}
+	
+	public void delete(Long id) {
+
+		try {
+			repo.deleteById(id);
+		} catch (IllegalArgumentException e) {
+			throw new PersistentException(e.getMessage());
+		}
 	}
 
 }

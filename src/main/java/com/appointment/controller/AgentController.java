@@ -27,11 +27,11 @@ import com.appointment.service.AgentService;
 public class AgentController {
 
 	@Autowired
-	AgentService agentService;
+	AgentService service;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Agent>> getAll() {
-		List<Agent> agents = agentService.getAll();
+		List<Agent> agents = service.getAll();
 
 		return ResponseEntity.ok(agents);
 	}
@@ -40,7 +40,7 @@ public class AgentController {
 	public ResponseEntity<Agent> getById(@PathVariable(value="id") Long id) {
 		Agent agentEntity = null;
 		try {
-			agentEntity = agentService.getById(id);
+			agentEntity = service.getById(id);
 		} catch (PersistentException e) {
 			return ResponseEntity.notFound().build();
 		}			
@@ -51,25 +51,25 @@ public class AgentController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Agent> create(@RequestBody Agent agent) {
 
-		Agent agentEntity = agentService.create(agent, false);
+		Agent entity = service.create(agent, false);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(agentEntity.getId()).toUri();
+				.buildAndExpand(entity.getId()).toUri();
 
-		return ResponseEntity.created(location).body(agentEntity);
+		return ResponseEntity.created(location).body(entity);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Agent> update(@PathVariable(value = "id") Long id, @RequestBody Agent agent) {
 
-		Agent agentEntity = null;
+		Agent entity = null;
 		
 		try {
-			agentEntity = agentService.update(id, agent);			
+			entity = service.update(id, agent);			
 		} catch (PersistentException e) {
 			return ResponseEntity.notFound().build();
 		}			
 
-		return ResponseEntity.ok(agentEntity);
+		return ResponseEntity.ok(entity);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,7 +77,7 @@ public class AgentController {
 		Map<Long, String> result = new HashMap<>();
 		
 		try {			
-			agentService.delete(id);
+			service.delete(id);
 			result.put(id, "OK");
 		} catch (PersistentException e) {
 			return ResponseEntity.notFound().build();
