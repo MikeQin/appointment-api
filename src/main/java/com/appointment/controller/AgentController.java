@@ -51,7 +51,7 @@ public class AgentController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Agent> create(@RequestBody Agent agent) {
 
-		Agent agentEntity = agentService.create(agent);
+		Agent agentEntity = agentService.create(agent, false);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(agentEntity.getId()).toUri();
 

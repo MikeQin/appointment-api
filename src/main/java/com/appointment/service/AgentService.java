@@ -36,9 +36,16 @@ public class AgentService {
 		return agentEntity;
 	}
 
-	public Agent create(Agent agent) {
+	public Agent create(Agent agent, boolean flush) {
 
 		Agent agentEntity = repo.save(agent);
+		
+		if (flush) {
+			agentEntity = repo.saveAndFlush(agent);
+		} else {
+			agentEntity = repo.save(agent);
+		}
+		
 		return agentEntity;
 	}
 

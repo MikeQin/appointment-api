@@ -32,8 +32,8 @@ public class DbBootstrap implements CommandLineRunner {
 		Agent a1 = Agent.builder().firstName("John").lastName("Doe").email("john.doe@gmail.com").build();
 		Agent a2 = Agent.builder().firstName("Amy").lastName("Smith").email("amy.smith@gmail.com").build();
 		
-		a1 = agentService.create(a1);
-		a2 = agentService.create(a2);
+		a1 = agentService.create(a1, false);
+		a2 = agentService.create(a2, false);
 		
 		log.info(a1.toString());
 		log.info(a2.toString());

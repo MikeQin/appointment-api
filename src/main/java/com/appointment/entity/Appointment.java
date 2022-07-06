@@ -1,5 +1,8 @@
 package com.appointment.entity;
 
+import java.util.Date;
+
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,19 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Table(name = "APPOINTMENT")
 public class Appointment {
@@ -32,6 +35,12 @@ public class Appointment {
 	@Column(unique = true)
 	private String title;
 	private String description;
+	@Basic
+    @Temporal(TemporalType.DATE)
+	private Date startTime;
+	@Basic
+    @Temporal(TemporalType.DATE)
+	private Date endTime;
 	
 	// relationship mapping
 	@ManyToOne

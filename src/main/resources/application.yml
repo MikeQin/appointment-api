@@ -12,7 +12,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: update # update, create, create-drop
+      ddl-auto: create-drop # update, create, create-drop
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
 #  data:
