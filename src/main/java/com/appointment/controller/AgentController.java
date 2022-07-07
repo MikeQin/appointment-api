@@ -31,8 +31,26 @@ public class AgentController {
 	AgentService service;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Agent>> getAll() {
-		List<Agent> agents = service.getAll();
+	public ResponseEntity<Object> getAll(
+			@RequestParam(name = "email", defaultValue = "", required = false) String email,
+			@RequestParam(name = "firstName", defaultValue = "", required = false) String firstName,
+			@RequestParam(name = "lastName", defaultValue = "", required = false) String lastName) {
+		
+		List<Agent> agents = null;
+		
+		if (!email.isBlank()) {
+			Agent agent = service.getByEmail(email);
+			return ResponseEntity.ok(agent);
+		}
+		else if (!firstName.isBlank()) {
+			agents = service.getByFirstName(firstName);
+		}
+		else if (!lastName.isBlank()) {
+			agents = service.getByLastName(lastName);
+		}
+		else {
+			agents = service.getAll();
+		}
 
 		return ResponseEntity.ok(agents);
 	}
@@ -47,24 +65,6 @@ public class AgentController {
 		}			
 
 		return ResponseEntity.ok(agent);
-	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Agent> getByEmail(@RequestParam("email") String email) {
-		Agent agent = service.getByEmail(email);
-		return ResponseEntity.ok(agent);
-	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Agent>> getByFirstName(@RequestParam("firstName") String firstName) {
-		List<Agent> agents = service.getByFirstName(firstName);
-		return ResponseEntity.ok(agents);
-	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Agent>> getByLastName(@RequestParam("lastName") String lastName) {
-		List<Agent> agents = service.getByLastName(lastName);
-		return ResponseEntity.ok(agents);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

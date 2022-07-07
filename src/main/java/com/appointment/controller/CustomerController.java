@@ -31,9 +31,27 @@ public class CustomerController {
 	CustomerService service;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Customer>> getAll() {
+	public ResponseEntity<Object> getAll(
+			@RequestParam(name = "email", defaultValue = "", required = false) String email,
+			@RequestParam(name = "firstName", defaultValue = "", required = false) String firstName,
+			@RequestParam(name = "lastName", defaultValue = "", required = false) String lastName) {
 		
 		List<Customer> customers = service.getAll();
+		
+		if (!email.isBlank()) {
+			Customer customer = service.getByEmail(email);
+			return ResponseEntity.ok(customer);
+		}
+		else if (!firstName.isBlank()) {
+			customers = service.getByFirstName(firstName);
+		}
+		else if (!lastName.isBlank()) {
+			customers = service.getByLastName(lastName);
+		}
+		else {
+			customers = service.getAll();
+		}
+
 		return ResponseEntity.ok(customers);
 	}
 	
@@ -47,24 +65,6 @@ public class CustomerController {
 		}
 		
 		return ResponseEntity.ok(customer);
-	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Customer> getByEmail(@RequestParam("email") String email) {
-		Customer customer = service.getByEmail(email);
-		return ResponseEntity.ok(customer);
-	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Customer>> getByFirstName(@RequestParam("firstName") String firstName) {
-		List<Customer> customers = service.getByFirstName(firstName);
-		return ResponseEntity.ok(customers);
-	}
-	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Customer>> getByLastName(@RequestParam("lastName") String lastName) {
-		List<Customer> customers = service.getByLastName(lastName);
-		return ResponseEntity.ok(customers);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
