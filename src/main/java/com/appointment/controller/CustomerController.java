@@ -56,7 +56,9 @@ public class CustomerController {
 	}
 	
 	@GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Customer> getById(@PathVariable("id") Long id) {
+	public ResponseEntity<Customer> getById(
+			@PathVariable(name = "id", required = true) Long id) {
+		
 		Customer customer = null;
 		try {
 			customer = service.getById(id);
@@ -78,7 +80,9 @@ public class CustomerController {
 	}
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Customer> update(@PathVariable(value = "id") Long id, @RequestBody Customer customer) {
+	public ResponseEntity<Customer> update(
+			@PathVariable(name = "id", required = true) Long id, 
+			@RequestBody Customer customer) {
 
 		Customer entity = null;
 		
@@ -92,7 +96,9 @@ public class CustomerController {
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<Long, String>> delete(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<Map<Long, String>> delete(
+			@PathVariable(name = "id", required = true) Long id) {
+		
 		Map<Long, String> result = new HashMap<>();
 		
 		try {			

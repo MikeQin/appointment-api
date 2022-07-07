@@ -56,7 +56,9 @@ public class AgentController {
 	}
 	
 	@GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Agent> getById(@PathVariable(value="id") Long id) {
+	public ResponseEntity<Agent> getById(
+			@PathVariable(name = "id", required = true) Long id) {
+		
 		Agent agent = null;
 		try {
 			agent = service.getById(id);
@@ -78,7 +80,9 @@ public class AgentController {
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Agent> update(@PathVariable(value = "id") Long id, @RequestBody Agent agent) {
+	public ResponseEntity<Agent> update(
+			@PathVariable(name = "id", required = true) Long id, 
+			@RequestBody Agent agent) {
 
 		Agent entity = null;
 		
@@ -92,7 +96,9 @@ public class AgentController {
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<Long, String>> delete(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<Map<Long, String>> delete(
+			@PathVariable(name = "id", required = true) Long id) {
+		
 		Map<Long, String> result = new HashMap<>();
 		
 		try {			

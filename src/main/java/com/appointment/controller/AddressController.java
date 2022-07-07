@@ -36,7 +36,7 @@ public class AddressController {
 	}
 	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> delete(@PathVariable Long id) {
+	public ResponseEntity<Object> delete(@PathVariable(name = "id", required = true) Long id) {
 		try {			
 			service.delete(id);
 		} catch (PersistentException e) {
