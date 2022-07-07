@@ -1,9 +1,7 @@
 package com.appointment.controller;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,40 +29,37 @@ public class AgentController {
 	AgentService service;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> get(
-			@RequestParam(name = "email", defaultValue = "", required = false) String email,
+	public ResponseEntity<Object> get(@RequestParam(name = "email", defaultValue = "", required = false) String email,
 			@RequestParam(name = "firstName", defaultValue = "", required = false) String firstName,
 			@RequestParam(name = "lastName", defaultValue = "", required = false) String lastName) {
-		
+
 		List<Agent> agents = null;
-		
+
 		if (!email.isBlank()) {
 			Agent agent = service.getByEmail(email);
 			return ResponseEntity.ok(agent);
-		}
-		else if (!firstName.isBlank()) {
+		} else if (!firstName.isBlank()) {
 			agents = service.getByFirstName(firstName);
-		}
-		else if (!lastName.isBlank()) {
+		} else if (!lastName.isBlank()) {
 			agents = service.getByLastName(lastName);
-		}
-		else {
+		} else {
 			agents = service.getAll();
 		}
 
 		return ResponseEntity.ok(agents);
 	}
-	
-	@GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Agent> getById(
-			@PathVariable(name = "id", required = true) Long id) {
-		
+
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> getById(@PathVariable(name = "id", required = true) Long id) {
+
 		Agent agent = null;
 		try {
 			agent = service.getById(id);
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
-		}			
+			ClientValidationError error 
+				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
+		}
 
 		return ResponseEntity.ok(agent);
 	}
@@ -73,42 +68,44 @@ public class AgentController {
 	public ResponseEntity<Agent> create(@RequestBody Agent agent) {
 
 		Agent entity = service.create(agent, false);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(entity.getId()).toUri();
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(entity.getId())
+				.toUri();
 
 		return ResponseEntity.created(location).body(entity);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Agent> update(
-			@PathVariable(name = "id", required = true) Long id, 
+	public ResponseEntity<Object> update(@PathVariable(name = "id", required = true) Long id,
 			@RequestBody Agent agent) {
 
 		Agent entity = null;
-		
+
 		try {
-			entity = service.update(id, agent);			
+			entity = service.update(id, agent);
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
-		}			
+			ClientValidationError error = ClientValidationError
+					.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
+		}
 
 		return ResponseEntity.ok(entity);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<Long, String>> delete(
-			@PathVariable(name = "id", required = true) Long id) {
-		
-		Map<Long, String> result = new HashMap<>();
-		
+	public ResponseEntity<Object> delete(@PathVariable(name = "id", required = true) Long id) {
+
 		try {			
 			service.delete(id);
-			result.put(id, "OK");
+			Status status = Status.builder().message("DELETE SUCCESS, ID: " + id).build();
+			return ResponseEntity.ok(status);
+			
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
+			ClientValidationError error 
+				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
 		}
-		
-		return ResponseEntity.ok(result);
 	}
 
 }

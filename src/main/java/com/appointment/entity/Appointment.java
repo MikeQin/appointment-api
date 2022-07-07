@@ -40,14 +40,14 @@ public class Appointment {
 	private String title;
 	private String description;
 	@Basic
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, locale="en", timezone="GMT-5", pattern="yyyy-MM-dd HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm") // , locale="us", timezone="GMT-5"
 	private Date startTime;
 	@Basic
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, locale="en", timezone="GMT-5", pattern="yyyy-MM-dd HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
 	private Date endTime;
 	
 	// relationship mapping

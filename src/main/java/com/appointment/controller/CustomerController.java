@@ -1,9 +1,7 @@
 package com.appointment.controller;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -80,7 +78,7 @@ public class CustomerController {
 	}
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Customer> update(
+	public ResponseEntity<Object> update(
 			@PathVariable(name = "id", required = true) Long id, 
 			@RequestBody Customer customer) {
 
@@ -89,26 +87,28 @@ public class CustomerController {
 		try {
 			entity = service.update(id, customer);			
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
+			ClientValidationError error 
+				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
 		}			
 
 		return ResponseEntity.ok(entity);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<Long, String>> delete(
+	public ResponseEntity<Object> delete(
 			@PathVariable(name = "id", required = true) Long id) {
-		
-		Map<Long, String> result = new HashMap<>();
 		
 		try {			
 			service.delete(id);
-			result.put(id, "OK");
+			Status status = Status.builder().message("DELETE SUCCESS, ID: " + id).build();
+			return ResponseEntity.ok(status);
+			
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
+			ClientValidationError error 
+				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
 		}
-		
-		return ResponseEntity.ok(result);
 	}
 
 }

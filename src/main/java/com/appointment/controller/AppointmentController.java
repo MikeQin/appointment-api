@@ -1,6 +1,7 @@
 package com.appointment.controller;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.MediaType;
@@ -49,9 +50,16 @@ public class AppointmentController {
 	 * @return
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Appointment> create(@RequestBody AppointmentTO appointmentTO) {
+	public ResponseEntity<Object> create(@RequestBody AppointmentTO appointmentTO) {
 		
 		Appointment entity = service.create(appointmentTO);
+		
+		if (validateDates(appointmentTO) == false) {		
+			
+			ClientValidationError error = ClientValidationError
+					.builder().error("Start Date/Time can't be after End Date/Time").build();
+			return ResponseEntity.badRequest().body(error);
+		}
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(entity.getId()).toUri();
@@ -61,12 +69,29 @@ public class AppointmentController {
 	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> delete(@PathVariable(name = "id", required = true) Long id) {
+		
 		try {			
 			service.delete(id);
+			Status status = Status.builder().message("DELETE SUCCESS, ID: " + id).build();
+			return ResponseEntity.ok(status);
+			
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
+			ClientValidationError error 
+				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
+		}
+	}
+	
+	private boolean validateDates(AppointmentTO to) {
+		boolean valid = true;
+		
+		Date start = to.getStartTime();
+		Date end = to.getEndTime();
+		
+		if (start.after(end)) {
+			valid = false;
 		}
 		
-		return ResponseEntity.noContent().build();
+		return valid;
 	}
 }

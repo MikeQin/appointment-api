@@ -37,12 +37,16 @@ public class AddressController {
 	
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> delete(@PathVariable(name = "id", required = true) Long id) {
+		
 		try {			
 			service.delete(id);
+			Status status = Status.builder().message("DELETE SUCCESS, ID: " + id).build();
+			return ResponseEntity.ok(status);
+			
 		} catch (PersistentException e) {
-			return ResponseEntity.notFound().build();
+			ClientValidationError error 
+				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			return ResponseEntity.badRequest().body(error);
 		}
-		
-		return ResponseEntity.noContent().build();
 	}
 }
