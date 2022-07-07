@@ -1,6 +1,7 @@
 package com.appointment.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,18 @@ public class AppointmentController {
 	public AppointmentController(AppointmentService service) {
 		this.service = service;
 	}
-
+	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Appointment> getByTitle(@RequestParam(name = "title") String title) {
-
-		Appointment appointment = service.getByTitle(title);
-		return ResponseEntity.ok(appointment);
+	public ResponseEntity<Object> get(
+			@RequestParam(name = "title", defaultValue = "", required = false) String title) {
+		
+		if (!title.isBlank()) {
+			Appointment appointment = service.getByTitle(title);
+			return ResponseEntity.ok(appointment);
+		}
+		
+		List<Appointment> appointments = service.getAll();
+		return ResponseEntity.ok(appointments);
 	}
 
 	/**

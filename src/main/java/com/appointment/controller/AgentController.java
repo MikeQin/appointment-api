@@ -31,7 +31,7 @@ public class AgentController {
 	AgentService service;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getAll(
+	public ResponseEntity<Object> get(
 			@RequestParam(name = "email", defaultValue = "", required = false) String email,
 			@RequestParam(name = "firstName", defaultValue = "", required = false) String firstName,
 			@RequestParam(name = "lastName", defaultValue = "", required = false) String lastName) {
