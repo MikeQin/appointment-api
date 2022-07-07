@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,14 +39,32 @@ public class AgentController {
 	
 	@GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Agent> getById(@PathVariable(value="id") Long id) {
-		Agent agentEntity = null;
+		Agent agent = null;
 		try {
-			agentEntity = service.getById(id);
+			agent = service.getById(id);
 		} catch (PersistentException e) {
 			return ResponseEntity.notFound().build();
 		}			
 
-		return ResponseEntity.ok(agentEntity);
+		return ResponseEntity.ok(agent);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Agent> getByEmail(@RequestParam("email") String email) {
+		Agent agent = service.getByEmail(email);
+		return ResponseEntity.ok(agent);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Agent>> getByFirstName(@RequestParam("firstName") String firstName) {
+		List<Agent> agents = service.getByFirstName(firstName);
+		return ResponseEntity.ok(agents);
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Agent>> getByLastName(@RequestParam("lastName") String lastName) {
+		List<Agent> agents = service.getByLastName(lastName);
+		return ResponseEntity.ok(agents);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
