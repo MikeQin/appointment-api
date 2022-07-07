@@ -15,6 +15,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,9 +41,13 @@ public class Appointment {
 	private String description;
 	@Basic
     @Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale="en", timezone="GMT-5", pattern="yyyy-MM-dd HH:mm")
 	private Date startTime;
 	@Basic
     @Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, locale="en", timezone="GMT-5", pattern="yyyy-MM-dd HH:mm")
 	private Date endTime;
 	
 	// relationship mapping
