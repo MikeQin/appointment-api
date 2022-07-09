@@ -1,8 +1,10 @@
 package com.appointment.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.appointment.entity.Customer;
@@ -24,12 +26,16 @@ public class CustomerService {
 		return customers;
 	}
 	
+	public long count() {
+		return repo.count();
+	}
+	
 	public Customer getById(Long id) {
 		Customer customerEntity = null;
 		
 		try {
 			customerEntity = repo.findById(id).get();
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			throw new PersistentException(e.getMessage());
 		}
 		
@@ -74,7 +80,7 @@ public class CustomerService {
 		Customer customerEntity = null;
 		try {
 			customerEntity = repo.findById(id).get();
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			throw new PersistentException(e.getMessage());
 		}
 		
@@ -88,7 +94,7 @@ public class CustomerService {
 
 		try {
 			repo.deleteById(id);
-		} catch (IllegalArgumentException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new PersistentException(e.getMessage());
 		}
 	}

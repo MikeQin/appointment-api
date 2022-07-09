@@ -56,8 +56,8 @@ public class AgentController {
 		try {
 			agent = service.getById(id);
 		} catch (PersistentException e) {
-			ClientValidationError error 
-				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			ClientError error 
+				= ClientError.builder().error("Invalid ID [" + id + "]").build();
 			return ResponseEntity.badRequest().body(error);
 		}
 
@@ -85,8 +85,8 @@ public class AgentController {
 		try {
 			entity = service.update(id, agent);
 		} catch (PersistentException e) {
-			ClientValidationError error = ClientValidationError
-					.builder().error("Invalid ID [" + "]").build();
+			ClientError error = ClientError
+					.builder().error("Invalid ID [" + id + "]").build();
 			return ResponseEntity.badRequest().body(error);
 		}
 
@@ -102,8 +102,8 @@ public class AgentController {
 			return ResponseEntity.ok(status);
 			
 		} catch (PersistentException e) {
-			ClientValidationError error 
-				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			ClientError error 
+				= ClientError.builder().error("Invalid ID [" + id + "]").build();
 			return ResponseEntity.badRequest().body(error);
 		}
 	}

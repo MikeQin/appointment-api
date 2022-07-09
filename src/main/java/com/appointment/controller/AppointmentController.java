@@ -43,6 +43,21 @@ public class AppointmentController {
 		List<Appointment> appointments = service.getAll();
 		return ResponseEntity.ok(appointments);
 	}
+	
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> getById(@PathVariable(name = "id", required = true) Long id) {
+
+		Appointment appointment = null;
+		try {
+			appointment = service.getById(id);
+		} catch (PersistentException e) {
+			ClientError error 
+				= ClientError.builder().error("Invalid ID [" + id + "]").build();
+			return ResponseEntity.badRequest().body(error);
+		}
+
+		return ResponseEntity.ok(appointment);
+	}
 
 	/**
 	 * 
@@ -56,7 +71,7 @@ public class AppointmentController {
 		
 		if (validateDates(appointmentTO) == false) {		
 			
-			ClientValidationError error = ClientValidationError
+			ClientError error = ClientError
 					.builder().error("Start Date/Time can't be after End Date/Time").build();
 			return ResponseEntity.badRequest().body(error);
 		}
@@ -76,8 +91,8 @@ public class AppointmentController {
 			return ResponseEntity.ok(status);
 			
 		} catch (PersistentException e) {
-			ClientValidationError error 
-				= ClientValidationError.builder().error("Invalid ID [" + "]").build();
+			ClientError error 
+				= ClientError.builder().error("Invalid ID [" + id + "]").build();
 			return ResponseEntity.badRequest().body(error);
 		}
 	}

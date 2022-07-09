@@ -2,8 +2,10 @@ package com.appointment.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.appointment.entity.Agent;
@@ -35,6 +37,10 @@ public class AppointmentService {
 		List<Appointment> appointments = repo.findAll();
 		return appointments;
 	}
+	
+	public long count() {
+		return repo.count();
+	}
 
 	public Appointment getById(Long id) {
 
@@ -42,7 +48,7 @@ public class AppointmentService {
 		try {
 			appointment = repo.findById(id).get();
 
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			throw new PersistentException(e.getMessage());
 		}
 
@@ -58,6 +64,15 @@ public class AppointmentService {
 		Appointment appointment = repo.findByStartTimeAndEndTime(startTime, endTime);
 
 		return appointment;
+	}
+	
+	/**
+	 * Create from a fully populated Appointment object
+	 * @param appointment, a fully populated Appointment object
+	 * @return
+	 */
+	public Appointment create(Appointment appointment) {
+		return repo.save(appointment);
 	}
 
 	public Appointment create(AppointmentTO appointmentTO) {
@@ -100,7 +115,7 @@ public class AppointmentService {
 		Appointment entity = null;
 		try {
 			entity = repo.findById(id).get();
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			throw new PersistentException(e.getMessage());
 		}
 
@@ -117,7 +132,7 @@ public class AppointmentService {
 
 		try {
 			repo.deleteById(id);
-		} catch (IllegalArgumentException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new PersistentException(e.getMessage());
 		}
 	}

@@ -1,8 +1,10 @@
 package com.appointment.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.appointment.entity.Agent;
@@ -22,13 +24,17 @@ public class AgentService {
 		List<Agent> agents = repo.findAll();
 		return agents;
 	}
+	
+	public long count() {
+		return repo.count();
+	}
 
 	public Agent getById(Long id) {
 		
 		Agent agentEntity = null;	
 		try {
 			agentEntity = repo.findById(id).get();
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			throw new PersistentException(e.getMessage());
 		}	
 		return agentEntity;
@@ -72,7 +78,7 @@ public class AgentService {
 		Agent agentEntity = null;
 		try {
 			agentEntity = repo.findById(id).get();
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			throw new PersistentException(e.getMessage());
 		}
 
@@ -87,7 +93,7 @@ public class AgentService {
 
 		try {
 			repo.deleteById(id);
-		} catch (IllegalArgumentException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new PersistentException(e.getMessage());
 		}
 	}

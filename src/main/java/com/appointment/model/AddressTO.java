@@ -10,4 +10,6 @@ import lombok.EqualsAndHashCode;
 public class AddressTO extends Address {
 
 	private Long customerId;
+	
+	
 }

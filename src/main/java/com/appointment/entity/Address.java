@@ -38,4 +38,5 @@ public class Address {
 	@JoinColumn(name = "customer_id", referencedColumnName = "id")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Customer customer;
+
 }

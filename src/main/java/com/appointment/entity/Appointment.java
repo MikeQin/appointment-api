@@ -57,4 +57,5 @@ public class Appointment {
 	@ManyToOne
 	@JoinColumn(name = "customer_id", referencedColumnName = "id")
 	private Customer customer;
+
 }

@@ -48,7 +48,7 @@ public class Customer {
     
     // relationship mapping
     // OneToMany mapping here is OK since only a few addresses for each customer
-    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Address> addresses;
     
     public String getName() {
